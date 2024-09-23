@@ -1,23 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState } from 'react';
+import StockForm from './StockForm';
+import axios from 'axios';
 
 function App() {
+  const [stockData, setStockData] = useState(null);
+  const API_KEY = process.env.REACT_APP_ALPHA_VANTAGE_API_KEY;
+
+  const getStockData = async (symbol) => {
+    try {
+      const response = await axios.get(
+        `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=5min&apikey=${API_KEY}`
+      );
+      setStockData(response.data);
+    } catch (error) {
+      console.error('Error fetching stock data:', error);
+    }
+  };
+  
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Stock Price Summarizer</h1>
+      <StockForm getStockData={getStockData} />
+      {stockData ? (
+        <pre>{JSON.stringify(stockData, null, 2)}</pre>
+      ) : (
+        <p>No data yet.</p>
+      )}
     </div>
   );
 }
