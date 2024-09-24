@@ -1,6 +1,7 @@
 import './App.css';
 import React, { useState } from 'react';
 import StockForm from './StockForm';
+import NavigationBar from './navbar';
 import axios from 'axios';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
   
   return (
     <div>
+      <NavigationBar /> {/* Rendering the NavigationBar component */}
       <h1>Stock Price Summarizer</h1>
       <StockForm getStockData={getStockData} />
       {error && <p style={{ color: 'red' }}>{error}</p>}
