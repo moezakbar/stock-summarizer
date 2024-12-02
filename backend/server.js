@@ -67,8 +67,12 @@ app.get('/api/stock/weekly/:symbol', async (req, res) => {
 app.get('/api/stock/monthly/:symbol', async (req, res) => {
   const symbol = req.params.symbol;
   try {
+    const today = moment();
+    const thirtyDaysAgo = today.clone().subtract(30, 'days').format('YYYY-MM-DD');
+    const todayFormatted = today.format('YYYY-MM-DD');
+
     const response = await axios.get(
-      `https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/month/2024-01-01/2024-11-26?apiKey=${POLYGON_API_KEY}`
+      `https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/day/${thirtyDaysAgo}/${todayFormatted}?apiKey=${POLYGON_API_KEY}`
     );
     const timeSeries = response.data.results;
     if (!timeSeries) {
@@ -76,7 +80,7 @@ app.get('/api/stock/monthly/:symbol', async (req, res) => {
     }
 
     const parsedData = timeSeries.map((data) => ({
-      date: data.t,  // timestamp
+      date: moment(data.t).format('YYYY-MM-DD'),  // timestamp
       adjustedClose: data.c, // adjusted close for monthly data
     }));
 

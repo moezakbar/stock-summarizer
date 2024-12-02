@@ -15,11 +15,6 @@ function StockChart({ stockData, chartType }) {
       labels.push(data.date); // Use the formatted 'date' field
       prices.push(data.adjustedClose);
     });
-    // Iterate through the object keys (dates) and retrieve the corresponding adjustedClose values
-    // Object.keys(timeSeries).forEach((date) => {
-    //   labels.push(date);
-    //   prices.push(timeSeries[date].adjustedClose); // Use adjustedClose
-    // });
   
     return {
       labels: labels,  // Ensure dates are in chronological order
