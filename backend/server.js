@@ -152,7 +152,7 @@ app.post('/api/chatbot', async (req, res) => {
         `;
   
     const response = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o-mini',
       messages: [
         { role: 'system', content: "You are a financial market expert and stock news analyst." },
         { role: 'user', content: prompt },
