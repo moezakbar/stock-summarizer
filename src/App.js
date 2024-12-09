@@ -39,6 +39,8 @@ function App() {
 
   const getStockData = async (symbol) => {
     try {
+      setError('')
+
       const weeklyResponse = await axios.get(`/api/stock/weekly/${symbol}`);
       const monthlyResponse = await axios.get(`/api/stock/monthly/${symbol}`);
       const companyResponse = await axios.get(`/api/stock/company/${symbol}`);
@@ -95,24 +97,36 @@ function App() {
                     justifyContent: 'space-between', // Add space between elements
                     width: '100%',
                     maxWidth: '1200px',
-                    gap: 2, // Adjust gap between the elements if necessary
+                    gap: 2, 
+                    flexWrap: 'wrap',
                   }}
                 >
-                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', border: '5px solid', borderColor: 'secondary.main', borderRadius: 2, }}>
+                  <Box sx={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    alignItems: 'flex-start', 
+                    border: '5px solid', 
+                    borderColor: 'secondary.main', 
+                    borderRadius: 2, 
+                    flex: 1,
+                    minWidth: '250px'
+                    }}>
                     
                     <Typography variant="h4" sx={{ flexShrink: 0, }}>
                       {companyName} {/* Display the company name */}
                     </Typography>
 
-                    <Typography variant="h6" sx={{ color: 'primary.main', mt: 1, fontSize: 59, }}>
-                      ${currentPrice?.toFixed(2)} {/* Show the dynamic stock price */}
+                    <Typography variant="h6" sx={{ color: 'primary.main', mt: 1, fontSize: 50, }}>
+                      ${currentPrice?.toFixed(2)} USD
                     </Typography>
 
                   </Box>
+
                   {/* Form Section */}
-                  <Box sx={{ flex: 1, maxWidth: '300px', border: '5px solid', borderColor: 'secondary.main', borderRadius: 2, }}>
+                  <Box sx={{ flex: 1, maxWidth: '300px', minWidth: '250px', border: '5px solid', borderColor: 'secondary.main', borderRadius: 2, display: 'flex', flexDirection: 'column',}}>
                     <StockForm getStockData={getStockData} />
                   </Box>
+
                 </Box>
                 
                 {/* Chart Section */}

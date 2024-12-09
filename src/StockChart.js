@@ -6,6 +6,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 function StockChart({ stockData, chartType, setHoveredPrice, resetPrice }) {
+
   const formatStockData = (stockData, type) => {
     const labels = [];
     const prices = [];
