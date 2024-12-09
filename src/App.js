@@ -98,13 +98,13 @@ function App() {
                     gap: 2, // Adjust gap between the elements if necessary
                   }}
                 >
-                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', border: '5px solid', borderColor: 'secondary.main', borderRadius: 2, }}>
                     
-                    <Typography variant="h4" sx={{ flexShrink: 0, border: '5px solid', borderColor: 'secondary.main', borderRadius: 2, mb: 0.7,}}>
+                    <Typography variant="h4" sx={{ flexShrink: 0, }}>
                       {companyName} {/* Display the company name */}
                     </Typography>
 
-                    <Typography variant="h6" sx={{ color: 'primary.main', mt: 1, fontSize: 59 }}>
+                    <Typography variant="h6" sx={{ color: 'primary.main', mt: 1, fontSize: 59, }}>
                       ${currentPrice?.toFixed(2)} {/* Show the dynamic stock price */}
                     </Typography>
 
