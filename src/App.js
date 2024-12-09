@@ -62,7 +62,7 @@ function App() {
                   borderRadius: 2, 
                   margin: '20px auto', 
                   boxShadow: 3, 
-                  maxWidth: '80%', 
+                  maxWidth: '90%', 
                   height: 'auto',
                 }}
               >
@@ -77,12 +77,12 @@ function App() {
                     gap: 2, // Adjust gap between the elements if necessary
                   }}
                 >
-                  <Typography variant="h4" sx={{ flexShrink: 0 }}>
+                  <Typography variant="h4" sx={{ flexShrink: 0, border: '5px solid', borderColor: 'secondary.main', borderRadius: 2, }}>
                     {companyName} {/* Display the company name */}
                   </Typography>
 
                   {/* Form Section */}
-                  <Box sx={{ flex: 1, maxWidth: '300px' }}>
+                  <Box sx={{ flex: 1, maxWidth: '300px', border: '5px solid', borderColor: 'secondary.main', borderRadius: 2, }}>
                     <StockForm getStockData={getStockData} />
                   </Box>
                 </Box>
@@ -91,11 +91,16 @@ function App() {
                 <Box
                   sx={{
                     display: 'flex',
-                    flexDirection: 'row',
+                    flexDirection: 'column', // Align content vertically
+                    alignItems: 'center',
                     gap: 2,
-                    alignItems: 'flex-start',
                     width: '100%',
                     maxWidth: '1200px',
+                    border: '5px solid',
+                    borderColor: 'secondary.main',
+                    borderRadius: 2,
+                    padding: 2,
+                    boxSizing: 'border-box', // Ensure padding is respected
                   }}
                 >
                 
@@ -105,9 +110,13 @@ function App() {
                     </Typography>
                   )}
                   {stockData && (
-                    <Box sx={{ flex: 1 }}>
+                    <Box sx={{ 
+                      width: '100%',
+                      maxWidth: '1000px', // Restrict max width to fit the parent box
+                      aspectRatio: '16 / 9', 
+                      }}>
                       <StockChart stockData={stockData} chartType={chartType} />
-                      <Box sx={{ marginTop: 2, display: 'flex', gap: 2 }}>
+                      <Box sx={{ marginTop: 2, display: 'flex', gap: 2, justifyContent: 'center' }}>
                         <Button
                           variant="contained"
                           color="primary"

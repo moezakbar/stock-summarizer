@@ -22,17 +22,52 @@ function StockChart({ stockData, chartType }) {
         {
           label: `${type.toUpperCase()} Stock Price`,
           data: prices,
-          borderColor: 'rgba(75,192,192,1)',
+          borderColor: 'rgba(97, 250, 148)',
           fill: false,
-          tension: 0.1
-        }
-      ]
+          tension: 0.1,
+        },
+      ],
     };
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.7)', // Tooltip background color
+        titleColor: '#fff',
+        bodyColor: '#fff',
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          drawOnChartArea: false, // Disable grid lines in the middle of the chart
+          drawBorder: true, // Draw border line along the x-axis
+          drawTicks: true, // Draw tick marks on the x-axis
+          color: 'rgba(0, 0, 0, 0.1)', // Border color
+        },
+        ticks: {
+          color: 'black', // Black ticks for x-axis
+        },
+      },
+      y: {
+        grid: {
+          drawOnChartArea: false, // Disable grid lines in the middle of the chart
+          drawBorder: true, // Draw border line along the y-axis
+          drawTicks: true, // Draw tick marks on the y-axis
+          color: 'rgba(0, 0, 0, 0.1)', // Border color
+        },
+        ticks: {
+          color: 'black', // Black ticks for y-axis
+        },
+      },
+    },
   };
 
   return (
     <div>
-      <Line data={formatStockData(stockData, chartType)} />
+      <Line data={formatStockData(stockData, chartType)} options={chartOptions} />
     </div>
   );
 }

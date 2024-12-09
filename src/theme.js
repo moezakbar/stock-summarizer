@@ -2,20 +2,39 @@ import { createTheme } from '@mui/material/styles';
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark', // Set the theme mode to dark
+    mode: 'light', // Change from 'dark' to 'light'
     primary: {
-      main: '#90caf9', // Customize primary color
+      main: '#1976d2', // Blue (default primary color in MUI)
     },
     secondary: {
-      main: '#f48fb1', // Customize secondary color
+      main: '#dc004e', // Pink (default secondary color in MUI)
     },
     background: {
-      default: '#121212', // Dark background
-      paper: '#1d1d1d', // Cards and paper components
+      default: '#f5f5f5', // Light grey background
+      paper: '#ffffff',   // White paper background
     },
     text: {
-      primary: '#ffffff', // Main text color
-      secondary: '#b0bec5', // Secondary text color
+      primary: '#000000', // Black text
+      secondary: '#5f6368', // Light grey text
+    },
+  },
+  typography: {
+    fontFamily: 'Roboto, Arial, sans-serif', // Default typography
+    body1: {
+      fontSize: '1rem',
+    },
+    body2: {
+      fontSize: '0.875rem',
+    },
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          backgroundColor: '#f5f5f5', // Apply light background globally
+          color: '#000000',           // Default text color
+        },
+      },
     },
   },
 });

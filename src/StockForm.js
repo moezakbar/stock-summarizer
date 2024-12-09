@@ -28,14 +28,23 @@ function StockForm({ getStockData }) {
         variant="outlined"
         value={symbol}
         onChange={(e) => setSymbol(e.target.value)}
-        sx={{ width: '300px' }} // Set the width of the text field
+        sx={{ 
+          width: '300px',
+          borderRadius: '20px', // Make it more rounded
+          '& .MuiOutlinedInput-root': {
+            borderRadius: '20px', // Make the border rounded
+          },
+          '& .MuiInputLabel-root': {
+            fontSize: '14px', // Optional: smaller label font size
+          },
+        }} // Set the width of the text field
       />
       <Button
         variant="contained"
         color="primary"
         type="submit"
         sx={{
-          width: '150px', // Set the width of the button
+          width: '100px', // Set the width of the button
         }}
       >
         Search
