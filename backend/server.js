@@ -18,6 +18,29 @@ const openai = new OpenAI({
 
 app.use(express.json());
 
+// Route to fetch company name based on stock symbol
+app.get('/api/stock/company/:symbol', async (req, res) => {
+  const symbol = req.params.symbol;
+  
+  try {
+    // Fetch company info using Polygon API or another source
+    const companyInfoResponse = await axios.get(
+      `https://api.polygon.io/v3/reference/tickers?ticker=${symbol}&active=true&limit=100&apiKey=${POLYGON_API_KEY}`
+    );
+
+    // Check if results exist and get the company name
+    if (companyInfoResponse.data.results && companyInfoResponse.data.results.length > 0) {
+      const companyName = companyInfoResponse.data.results[0].name;
+      res.json({ name: companyName });
+    } else {
+      res.status(404).json({ error: 'Company not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching company data:', error);
+    res.status(500).json({ error: 'Error fetching company information' });
+  }
+});
+
 // Route to fetch daily stock data
 app.get('/api/stock/daily/:symbol', async (req, res) => {
   const symbol = req.params.symbol;
@@ -55,6 +78,7 @@ app.get('/api/stock/weekly/:symbol', async (req, res) => {
     const response = await axios.get(
       `https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/day/${sevenDaysAgo}/${todayFormatted}?apiKey=${POLYGON_API_KEY}`
     );
+
     const timeSeries = response.data.results;
     if (!timeSeries) {
       return res.status(404).json({ message: 'No data found for the symbol' });

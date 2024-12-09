@@ -1,18 +1,23 @@
-import { Navbar, Nav } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import React from 'react';
+import { AppBar, Toolbar, Typography, Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
-const NavigationBar = () => (
-  <Navbar bg="dark" variant="dark">
-    <Navbar.Brand href="/">Stock App</Navbar.Brand>
-    <Nav className="mr-auto">
-      <LinkContainer to="/">
-        <Nav.Link>Home</Nav.Link>
-      </LinkContainer>
-      <LinkContainer to="/chatbot">
-        <Nav.Link>AI Chatbot</Nav.Link>
-      </LinkContainer>
-    </Nav>
-  </Navbar>
-);
+const NavigationBar = () => {
+  return (
+    <AppBar position="static" color="primary">
+      <Toolbar>
+        <Typography variant="h6" style={{ flexGrow: 1 }}>
+          Stock Price Summarizer
+        </Typography>
+        <Button color="inherit" component={Link} to="/">
+          Home
+        </Button>
+        <Button color="inherit" component={Link} to="/chatbot">
+          Chatbot
+        </Button>
+      </Toolbar>
+    </AppBar>
+  );
+};
 
 export default NavigationBar;
