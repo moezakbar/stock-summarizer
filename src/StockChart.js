@@ -5,7 +5,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 // Register required Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-function StockChart({ stockData, chartType }) {
+function StockChart({ stockData, chartType, setHoveredPrice, resetPrice }) {
   const formatStockData = (stockData, type) => {
     const labels = [];
     const prices = [];
@@ -62,6 +62,15 @@ function StockChart({ stockData, chartType }) {
           color: 'black', // Black ticks for y-axis
         },
       },
+    },
+    onHover: (event, chartElement) => {
+      if (chartElement.length > 0) {
+        const index = chartElement[0].index;
+        const hoveredPrice = stockData[chartType][index].adjustedClose;
+        setHoveredPrice(hoveredPrice); // Update the hovered price
+      } else {
+        resetPrice(); // Reset to the original price
+      }
     },
   };
 

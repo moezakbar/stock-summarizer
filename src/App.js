@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CssBaseline, ThemeProvider, Button, Box, Typography } from '@mui/material';
 import StockForm from './StockForm';
 import NavigationBar from './navbar';
@@ -15,6 +15,27 @@ function App() {
   const [companyName, setCompanyName] = useState('Stock Price Summarizer');
   const [error, setError] = useState(null);
   const [chartType, setChartType] = useState('weekly');
+  const [currentPrice, setCurrentPrice] = useState(null);
+  const [originalPrice, setOriginalPrice] = useState(null);
+
+  // Update hovered price
+  const handleHoveredPrice = (price) => {
+    setCurrentPrice(price);
+  };
+
+  // Reset price to original
+  const resetPrice = () => {
+    setCurrentPrice(originalPrice);
+  };
+
+  // Set original price when stock data changes
+  useEffect(() => {
+    if (stockData) {
+      const latestPrice = stockData[chartType][stockData[chartType].length - 1].adjustedClose;
+      setOriginalPrice(latestPrice);
+      setCurrentPrice(latestPrice);
+    }
+  }, [stockData, chartType]);
 
   const getStockData = async (symbol) => {
     try {
@@ -77,10 +98,17 @@ function App() {
                     gap: 2, // Adjust gap between the elements if necessary
                   }}
                 >
-                  <Typography variant="h4" sx={{ flexShrink: 0, border: '5px solid', borderColor: 'secondary.main', borderRadius: 2, }}>
-                    {companyName} {/* Display the company name */}
-                  </Typography>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                    
+                    <Typography variant="h4" sx={{ flexShrink: 0, border: '5px solid', borderColor: 'secondary.main', borderRadius: 2, mb: 0.7,}}>
+                      {companyName} {/* Display the company name */}
+                    </Typography>
 
+                    <Typography variant="h6" sx={{ color: 'primary.main', mt: 1, fontSize: 59 }}>
+                      ${currentPrice?.toFixed(2)} {/* Show the dynamic stock price */}
+                    </Typography>
+
+                  </Box>
                   {/* Form Section */}
                   <Box sx={{ flex: 1, maxWidth: '300px', border: '5px solid', borderColor: 'secondary.main', borderRadius: 2, }}>
                     <StockForm getStockData={getStockData} />
@@ -104,7 +132,7 @@ function App() {
                   }}
                 >
                 
-                {error && (
+                  {error && (
                     <Typography variant="body1" color="error" sx={{ flex: 1 }}>
                       {error}
                     </Typography>
@@ -115,7 +143,7 @@ function App() {
                       maxWidth: '1000px', // Restrict max width to fit the parent box
                       aspectRatio: '16 / 9', 
                       }}>
-                      <StockChart stockData={stockData} chartType={chartType} />
+                      <StockChart stockData={stockData} chartType={chartType} setHoveredPrice={handleHoveredPrice} resetPrice={resetPrice}/>
                       <Box sx={{ marginTop: 2, display: 'flex', gap: 2, justifyContent: 'center' }}>
                         <Button
                           variant="contained"
