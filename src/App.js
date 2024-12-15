@@ -17,23 +17,46 @@ function App() {
   const [chartType, setChartType] = useState('weekly');
   const [currentPrice, setCurrentPrice] = useState(null);
   const [originalPrice, setOriginalPrice] = useState(null);
+  const [currentPercentageChange, setCurrentPercentageChange] = useState(null);
 
   // Update hovered price
   const handleHoveredPrice = (price) => {
     setCurrentPrice(price);
+    if (originalPrice) {
+      const percentage = (((price - originalPrice) / originalPrice) * 100).toFixed(2);
+      setCurrentPercentageChange(percentage);
+    }
   };
 
   // Reset price to original
   const resetPrice = () => {
     setCurrentPrice(originalPrice);
+    
+    // calculate total percentage change overall and reset it to that variable
+    if (originalPrice && stockData) {
+      const dataPoints = stockData[chartType];
+      if (dataPoints && dataPoints.length > 0) {
+        const earliestPrice = dataPoints[0].adjustedClose;
+        const totalPercentageChange = (((originalPrice - earliestPrice) / earliestPrice) * 100).toFixed(2);
+        setCurrentPercentageChange(totalPercentageChange);
+      }
+    }
   };
 
   // Set original price when stock data changes
   useEffect(() => {
     if (stockData) {
-      const latestPrice = stockData[chartType][stockData[chartType].length - 1].adjustedClose;
-      setOriginalPrice(latestPrice);
-      setCurrentPrice(latestPrice);
+      const dataPoints = stockData[chartType];
+      if (dataPoints && dataPoints.length > 0) {
+        const latestPrice = dataPoints[dataPoints.length - 1].adjustedClose;
+        const earliestPrice = dataPoints[0].adjustedClose;
+  
+        const totalPercentageChange = (((latestPrice - earliestPrice) / earliestPrice) * 100).toFixed(2);
+  
+        setOriginalPrice(latestPrice);
+        setCurrentPrice(latestPrice);
+        setCurrentPercentageChange(totalPercentageChange); // Initialize percentage change here
+      }
     }
   }, [stockData, chartType]);
 
@@ -85,8 +108,10 @@ function App() {
                   borderRadius: 2, 
                   margin: '20px auto', 
                   boxShadow: 3, 
-                  maxWidth: '90%', 
+                  maxWidth: '100%', 
                   height: 'auto',
+                  marginTop: 0,
+                  marginLeft: 10,
                 }}
               >
                 <Box
@@ -118,6 +143,17 @@ function App() {
 
                     <Typography variant="h6" sx={{ color: 'primary.main', mt: 1, fontSize: 50, }}>
                       ${currentPrice?.toFixed(2)} USD
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          color: currentPercentageChange >= 0 ? 'green' : 'red', // Green for positive, red for negative
+                          fontSize: 20,
+                          marginLeft: 1,
+                        }}
+                        component="span"
+                      >
+                        ({currentPercentageChange >= 0 ? '+' : ''}{currentPercentageChange}%)
+                      </Typography>
                     </Typography>
 
                   </Box>
@@ -157,7 +193,7 @@ function App() {
                       maxWidth: '1000px', // Restrict max width to fit the parent box
                       aspectRatio: '16 / 9', 
                       }}>
-                      <StockChart stockData={stockData} chartType={chartType} setHoveredPrice={handleHoveredPrice} resetPrice={resetPrice}/>
+                      <StockChart stockData={stockData} chartType={chartType} setHoveredPrice={handleHoveredPrice} resetPrice={resetPrice} setPercentageChange={setCurrentPercentageChange}/>
                       <Box sx={{ marginTop: 2, display: 'flex', gap: 2, justifyContent: 'center' }}>
                         <Button
                           variant="contained"

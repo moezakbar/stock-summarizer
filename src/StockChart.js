@@ -5,7 +5,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 // Register required Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-function StockChart({ stockData, chartType, setHoveredPrice, resetPrice }) {
+function StockChart({ stockData, chartType, setHoveredPrice, resetPrice, setPercentageChange }) {
 
   const formatStockData = (stockData, type) => {
     const labels = [];
@@ -68,7 +68,11 @@ function StockChart({ stockData, chartType, setHoveredPrice, resetPrice }) {
       if (chartElement.length > 0) {
         const index = chartElement[0].index;
         const hoveredPrice = stockData[chartType][index].adjustedClose;
+        // Calculate percentage change
+        const firstPrice = stockData[chartType][0].adjustedClose;
+        const percentageChange = ((hoveredPrice - firstPrice) / firstPrice) * 100;
         setHoveredPrice(hoveredPrice); // Update the hovered price
+        setPercentageChange(percentageChange.toFixed(2))
       } else {
         resetPrice(); // Reset to the original price
       }
