@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { CssBaseline, ThemeProvider, Button, Box, Typography } from '@mui/material';
 import StockForm from './StockForm';
 import NavigationBar from './navbar';
+import Sidebar from './Sidebar';
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AIChatbot from './AIChatbot';
@@ -92,132 +93,149 @@ function App() {
       <CssBaseline />
       <Router>
         <NavigationBar />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 3,
-                  padding: 2,
-                  border: '5px solid', 
-                  borderColor: 'primary.main', 
-                  borderRadius: 2, 
-                  margin: '20px auto', 
-                  boxShadow: 3, 
-                  maxWidth: '100%', 
-                  height: 'auto',
-                  marginTop: 0,
-                  marginLeft: 10,
-                }}
-              >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'flex-start', // Align items vertically centered
-                    justifyContent: 'space-between', // Add space between elements
-                    width: '100%',
-                    maxWidth: '1200px',
-                    gap: 2, 
-                    flexWrap: 'wrap',
-                  }}
-                >
-                  <Box sx={{ 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    alignItems: 'flex-start', 
-                    border: '5px solid', 
-                    borderColor: 'secondary.main', 
-                    borderRadius: 2, 
-                    flex: 1,
-                    minWidth: '250px'
-                    }}>
-                    
-                    <Typography variant="h4" sx={{ flexShrink: 0, }}>
-                      {companyName} {/* Display the company name */}
-                    </Typography>
 
-                    <Typography variant="h6" sx={{ color: 'primary.main', mt: 1, fontSize: 50, }}>
-                      ${currentPrice?.toFixed(2)} USD
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          color: currentPercentageChange >= 0 ? 'green' : 'red', // Green for positive, red for negative
-                          fontSize: 20,
-                          marginLeft: 1,
-                        }}
-                        component="span"
-                      >
-                        ({currentPercentageChange >= 0 ? '+' : ''}{currentPercentageChange}%)
-                      </Typography>
-                    </Typography>
+        <Box sx={{ display: 'flex', marginTop: '64px' }}>
+          
+          <Sidebar />
 
-                  </Box>
+          <Box 
+            component="main"
+            sx={{ 
+              flexGrow: 1,
+              marginLeft: '180px', // Sidebar width
+              padding: 2,
+              backgroundColor: '#f5f5f5', // Optional background color for content
+              minHeight: '100vh', 
+              }}
+          >
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 3,
+                      padding: 2,
+                      border: '5px solid', 
+                      borderColor: 'primary.main', 
+                      borderRadius: 2, 
+                      margin: '20px auto', 
+                      boxShadow: 3, 
+                      maxWidth: '100%', 
+                      height: 'auto',
+                      marginTop: 0,
+                      marginLeft: 10,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'flex-start', // Align items vertically centered
+                        justifyContent: 'space-between', // Add space between elements
+                        width: '100%',
+                        maxWidth: '1200px',
+                        gap: 2, 
+                        flexWrap: 'wrap',
+                      }}
+                    >
+                      <Box sx={{ 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'flex-start', 
+                        border: '5px solid', 
+                        borderColor: 'secondary.main', 
+                        borderRadius: 2, 
+                        flex: 1,
+                        minWidth: '250px'
+                        }}>
+                        
+                        <Typography variant="h4" sx={{ flexShrink: 0, }}>
+                          {companyName} {/* Display the company name */}
+                        </Typography>
 
-                  {/* Form Section */}
-                  <Box sx={{ flex: 1, maxWidth: '300px', minWidth: '250px', border: '5px solid', borderColor: 'secondary.main', borderRadius: 2, display: 'flex', flexDirection: 'column',}}>
-                    <StockForm getStockData={getStockData} />
-                  </Box>
+                        <Typography variant="h6" sx={{ color: 'primary.main', mt: 1, fontSize: 50, }}>
+                          ${currentPrice?.toFixed(2)} USD
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              color: currentPercentageChange >= 0 ? 'green' : 'red', // Green for positive, red for negative
+                              fontSize: 20,
+                              marginLeft: 1,
+                            }}
+                            component="span"
+                          >
+                            ({currentPercentageChange >= 0 ? '+' : ''}{currentPercentageChange}%)
+                          </Typography>
+                        </Typography>
 
-                </Box>
-                
-                {/* Chart Section */}
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column', // Align content vertically
-                    alignItems: 'center',
-                    gap: 2,
-                    width: '100%',
-                    maxWidth: '1200px',
-                    border: '5px solid',
-                    borderColor: 'secondary.main',
-                    borderRadius: 2,
-                    padding: 2,
-                    boxSizing: 'border-box', // Ensure padding is respected
-                  }}
-                >
-                
-                  {error && (
-                    <Typography variant="body1" color="error" sx={{ flex: 1 }}>
-                      {error}
-                    </Typography>
-                  )}
-                  {stockData && (
-                    <Box sx={{ 
-                      width: '100%',
-                      maxWidth: '1000px', // Restrict max width to fit the parent box
-                      aspectRatio: '16 / 9', 
-                      }}>
-                      <StockChart stockData={stockData} chartType={chartType} setHoveredPrice={handleHoveredPrice} resetPrice={resetPrice} setPercentageChange={setCurrentPercentageChange}/>
-                      <Box sx={{ marginTop: 2, display: 'flex', gap: 2, justifyContent: 'center' }}>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => setChartType('weekly')}
-                        >
-                          Weekly
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => setChartType('monthly')}
-                        >
-                          Monthly
-                        </Button>
                       </Box>
+
+                      {/* Form Section */}
+                      <Box sx={{ flex: 1, maxWidth: '300px', minWidth: '250px', border: '5px solid', borderColor: 'secondary.main', borderRadius: 2, display: 'flex', flexDirection: 'column',}}>
+                        <StockForm getStockData={getStockData} />
+                      </Box>
+
                     </Box>
-                  )}
-                </Box>
-              </Box>
-            }
-          />
-          <Route path="/chatbot" element={<AIChatbot />} />
-        </Routes>
+                    
+                    {/* Chart Section */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'column', // Align content vertically
+                        alignItems: 'center',
+                        gap: 2,
+                        width: '100%',
+                        maxWidth: '1200px',
+                        border: '5px solid',
+                        borderColor: 'secondary.main',
+                        borderRadius: 2,
+                        padding: 2,
+                        boxSizing: 'border-box', // Ensure padding is respected
+                      }}
+                    >
+                    
+                      {error && (
+                        <Typography variant="body1" color="error" sx={{ flex: 1 }}>
+                          {error}
+                        </Typography>
+                      )}
+                      {stockData && (
+                        <Box sx={{ 
+                          width: '100%',
+                          maxWidth: '1000px', // Restrict max width to fit the parent box
+                          aspectRatio: '16 / 9', 
+                          }}>
+                          <StockChart stockData={stockData} chartType={chartType} setHoveredPrice={handleHoveredPrice} resetPrice={resetPrice} setPercentageChange={setCurrentPercentageChange}/>
+                          <Box sx={{ marginTop: 2, display: 'flex', gap: 2, justifyContent: 'center' }}>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={() => setChartType('weekly')}
+                            >
+                              Weekly
+                            </Button>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={() => setChartType('monthly')}
+                            >
+                              Monthly
+                            </Button>
+                          </Box>
+                        </Box>
+                      )}
+                    </Box>
+                  </Box>
+                }
+              />
+              <Route path="/chatbot" element={<AIChatbot />} />
+            </Routes>
+          </Box>
+        </Box>
       </Router>
     </ThemeProvider>
   );
