@@ -158,18 +158,24 @@ function App() {
                         </Typography>
 
                         <Typography variant="h6" sx={{ color: 'primary.main', mt: 1, fontSize: 50, }}>
-                          ${currentPrice?.toFixed(2)} USD
-                          <Typography
-                            variant="body1"
-                            sx={{
-                              color: currentPercentageChange >= 0 ? 'green' : 'red', // Green for positive, red for negative
-                              fontSize: 20,
-                              marginLeft: 1,
-                            }}
-                            component="span"
-                          >
-                            ({currentPercentageChange >= 0 ? '+' : ''}{currentPercentageChange}%)
-                          </Typography>
+                          {currentPrice ? (
+                            <>
+                              ${currentPrice.toFixed(2)} USD
+                              <Typography
+                                variant="body1"
+                                sx={{
+                                  color: currentPercentageChange >= 0 ? 'green' : 'red', // Green for positive, red for negative
+                                  fontSize: 20,
+                                  marginLeft: 1,
+                                }}
+                                component="span"
+                              >
+                                ({currentPercentageChange >= 0 ? '+' : ''}{currentPercentageChange}%)
+                              </Typography>
+                            </>
+                          ) : (
+                            ''
+                          )}
                         </Typography>
 
                       </Box>
