@@ -1,42 +1,22 @@
 import { createTheme } from '@mui/material/styles';
 
-const darkTheme = createTheme({
+const Theme = createTheme({
   palette: {
-    mode: 'light', // Change from 'dark' to 'light'
     primary: {
-      main: '#1976d2', // Blue (default primary color in MUI)
+      main: '#333333', // Dark grey for accents
     },
     secondary: {
-      main: '#dc004e', // Pink (default secondary color in MUI)
+      main: '#f5f5f5', // Light grey for highlights
     },
     background: {
-      default: '#f5f5f5', // Light grey background
-      paper: '#ffffff',   // White paper background
+      default: '#f5f5f5', // Light grey for the entire app
+      paper: '#f5f5f5', // Light grey for cards, drawers, etc.
     },
     text: {
-      primary: '#000000', // Black text
-      secondary: '#5f6368', // Light grey text
-    },
-  },
-  typography: {
-    fontFamily: 'Roboto, Arial, sans-serif', // Default typography
-    body1: {
-      fontSize: '1rem',
-    },
-    body2: {
-      fontSize: '0.875rem',
-    },
-  },
-  components: {
-    MuiCssBaseline: {
-      styleOverrides: {
-        body: {
-          backgroundColor: '#f5f5f5', // Apply light background globally
-          color: '#000000',           // Default text color
-        },
-      },
+      primary: '#333333', // Dark text
+      secondary: '#666666', // Subtle text
     },
   },
 });
 
-export default darkTheme;
+export default Theme;

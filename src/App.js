@@ -8,7 +8,8 @@ import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AIChatbot from './AIChatbot';
 import StockChart from './StockChart';
-import darkTheme from './theme';
+import StockFinancials from './stockFinancials';
+import Theme from './theme';
 
 
 function App() {
@@ -19,6 +20,8 @@ function App() {
   const [currentPrice, setCurrentPrice] = useState(null);
   const [originalPrice, setOriginalPrice] = useState(null);
   const [currentPercentageChange, setCurrentPercentageChange] = useState(null);
+  const [selectedTicker, setSelectedTicker] = useState(null);
+
 
   // Update hovered price
   const handleHoveredPrice = (price) => {
@@ -64,7 +67,7 @@ function App() {
   const getStockData = async (symbol) => {
     try {
       setError('')
-
+    
       const weeklyResponse = await axios.get(`/api/stock/weekly/${symbol}`);
       const monthlyResponse = await axios.get(`/api/stock/monthly/${symbol}`);
       const companyResponse = await axios.get(`/api/stock/company/${symbol}`);
@@ -78,6 +81,7 @@ function App() {
       }
   
       setCompanyName(companyData.name);
+      setSelectedTicker(symbol);
       setStockData({
         weekly: weeklyData,
         monthly: monthlyData,
@@ -88,15 +92,17 @@ function App() {
     }
   };
 
+
+
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={Theme}>
       <CssBaseline />
       <Router>
         <NavigationBar />
 
-        <Box sx={{ display: 'flex', marginTop: '64px' }}>
+        <Box sx={{ display: 'flex', marginTop: '64px', }}>
           
-          <Sidebar />
+          <Sidebar selectedTicker={selectedTicker}/>
 
           <Box 
             component="main"
@@ -119,11 +125,7 @@ function App() {
                       alignItems: 'center',
                       gap: 3,
                       padding: 2,
-                      border: '5px solid', 
-                      borderColor: 'primary.main', 
-                      borderRadius: 2, 
-                      margin: '20px auto', 
-                      boxShadow: 3, 
+                      margin: '20px auto',  
                       maxWidth: '100%', 
                       height: 'auto',
                       marginTop: 0,
@@ -145,10 +147,7 @@ function App() {
                       <Box sx={{ 
                         display: 'flex', 
                         flexDirection: 'column', 
-                        alignItems: 'flex-start', 
-                        border: '5px solid', 
-                        borderColor: 'secondary.main', 
-                        borderRadius: 2, 
+                        alignItems: 'flex-start',  
                         flex: 1,
                         minWidth: '250px'
                         }}>
@@ -196,9 +195,6 @@ function App() {
                         gap: 2,
                         width: '100%',
                         maxWidth: '1200px',
-                        border: '5px solid',
-                        borderColor: 'secondary.main',
-                        borderRadius: 2,
                         padding: 2,
                         boxSizing: 'border-box', // Ensure padding is respected
                       }}
@@ -209,13 +205,16 @@ function App() {
                           {error}
                         </Typography>
                       )}
+
                       {stockData && (
-                        <Box sx={{ 
-                          width: '100%',
-                          maxWidth: '1000px', // Restrict max width to fit the parent box
-                          aspectRatio: '16 / 9', 
-                          }}>
-                          <StockChart stockData={stockData} chartType={chartType} setHoveredPrice={handleHoveredPrice} resetPrice={resetPrice} setPercentageChange={setCurrentPercentageChange}/>
+                        <Box sx={{ width: '100%', maxWidth: '1000px', aspectRatio: '16 / 9' }}>
+                          <StockChart
+                            stockData={stockData}
+                            chartType={chartType}
+                            setHoveredPrice={handleHoveredPrice}
+                            resetPrice={resetPrice}
+                            setPercentageChange={setCurrentPercentageChange}
+                          />
                           <Box sx={{ marginTop: 2, display: 'flex', gap: 2, justifyContent: 'center' }}>
                             <Button
                               variant="contained"
@@ -239,6 +238,7 @@ function App() {
                 }
               />
               <Route path="/chatbot" element={<AIChatbot />} />
+              <Route path="/stockFinancials/:ticker" element={<StockFinancials />} />
             </Routes>
           </Box>
         </Box>

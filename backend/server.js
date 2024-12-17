@@ -18,6 +18,28 @@ const openai = new OpenAI({
 
 app.use(express.json());
 
+// Route to fetch financial data for a stock ticker
+app.get('/api/stock/financials/:ticker', async (req, res) => {
+  const ticker = req.params.ticker;
+
+  try {
+    // Polygon Financials API endpoint
+    const url = `https://api.polygon.io/vX/reference/financials?ticker=${ticker}&limit=1&apiKey=${POLYGON_API_KEY}`;
+    const response = await axios.get(url);
+
+    if (response.data && response.data.results && response.data.results.length > 0) {
+      // Extract the financials data
+      const financials = response.data.results[0].financials;
+      res.json(financials);
+    } else {
+      res.status(404).json({ error: 'No financial data found for this ticker.' });
+    }
+  } catch (error) {
+    console.error('Error fetching financial data:', error.response?.data || error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 // Route to fetch company name based on stock symbol
 app.get('/api/stock/company/:symbol', async (req, res) => {
   const symbol = req.params.symbol;

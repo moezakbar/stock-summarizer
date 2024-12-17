@@ -3,8 +3,9 @@ import { Box, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import InsightsIcon from '@mui/icons-material/Insights';
 import ChatIcon from '@mui/icons-material/Chat';
+import { Link } from 'react-router-dom';
 
-const Sidebar = () => {
+const Sidebar = ({ selectedTicker }) => {
   return (
     <Box
       sx={{
@@ -27,7 +28,7 @@ const Sidebar = () => {
           </ListItemIcon>
           <ListItemText primary="Stock Chart" sx={{ color: 'white' }} />
         </ListItem>
-        <ListItem button component="a" href="/financials" sx={{ color: 'white' }} >
+        <ListItem button component={Link} to={selectedTicker ? `/stockFinancials/${selectedTicker}` : '/stockFinancials'} sx={{ color: 'white' }} disabled={!selectedTicker} >
           <ListItemIcon sx={{ color: 'white' }}>
             <InsightsIcon />
           </ListItemIcon>
